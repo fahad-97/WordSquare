@@ -1,0 +1,23 @@
+I have made some notes of my thought process during this challenge. It might not make much sense to read but I will gladly walk through them during the interview if that helps.
+
+would have first googled immediately for a solution, but decided to tackle it without
+python script would have been my go-to but not very OOP and wanted to push myself a little
+download text file of approved words
+set up basic java app in intellij
+create class for approved words
+arraylist because don't need keys (dict) and uniqueness isn't essential (sets)
+bug fixing
+research into how to generate all possible combinations of n-length words from the n^2 input string
+https://stackoverflow.com/questions/29910312/algorithm-to-get-all-the-combinations-of-size-n-from-an-array-java explains we can get combinations of the indices of the array rather than the array item, I found a library earlier that does combinations of numbers from 0 so this sounds good
+realised although I have my combinations I still don't have my permutations as I need all possible orders of the indices too; answers online point to recursion
+some more processing to break work down into classes
+https://stackoverflow.com/questions/4240080/generating-all-permutations-of-a-given-string permutations of a string, so I can convert index combos back into strings then calculate permutations
+The permutations will be added to a set not a list as we don't want duplicates
+Just for fun and because I learned them recently I'm going to use streams to compare the set against the wordlist and modify
+can use Ccombinations api again to form nCr collections of n from the valid words. Streams could be useful here too
+note: https://stackoverflow.com/questions/29028980/why-cant-i-map-integers-to-strings-when-streaming-from-an-array this told me i need to mapToObj to convert Stream type properly (converting indexcombo to wordcombo)
+once implemented a lot of debugging e.g. point to the getPermutationsSet
+realized the method is flawed - commenting it all out. successes are being generated that do not form word squares.......
+some debugging during new method involved issues with strongly typed things, need more practice with this
+realized issues with using hashmap for the square; difficulty in creating deep copies. Hashmap is redundant anyway as the keys are 0 1 2 3 etc... will convert to List
+It's finally working so I'm going to ensure it runs from command line and make up some instructions
