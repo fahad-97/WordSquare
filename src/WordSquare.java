@@ -1,8 +1,10 @@
 import org.apache.commons.math3.util.Combinations;
 
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class WordSquare {
@@ -18,9 +20,17 @@ public class WordSquare {
     }
 
     private void generateSquare() {
-        // We want k word combinations from validWords, so n will be the length of validWords
-        int n = validWords.size();
-        Iterator<int[]> indexCombinationsIterator = new Combinations(n, k).iterator();
+        for (String currentWord : validWords) {
+
+            // Copy and filter validWords to only contain words starting with the letters in word
+            List<String> currentValidWords = new ArrayList<String>();
+            currentValidWords.addAll(validWords);
+            currentValidWords = currentValidWords.stream().filter(word -> {
+                return ((currentWord.indexOf(word.charAt(0)) >= 0) ? true : false);
+            }).collect(Collectors.toList());
+            
+        }
+
         while (indexCombinationsIterator.hasNext()) {
             int[] indexCombo = indexCombinationsIterator.next();
 
@@ -29,49 +39,6 @@ public class WordSquare {
             Supplier<Stream<String>> wordComboSupplier = () -> Arrays.stream(indexCombo).mapToObj(index -> validWords.get(index));
 
             // Test if current combination can fit into a square.
-
-            // FLAWED METHOD - I left it here if you would like to see
-//
-//            // Assume combination fits (success=true) until disproven.
-//            Boolean success = true;
-//            Map wordGrid = new HashMap();
-//
-//            // Loop through the indices of each word (e.g. i=0 is first letter of each word)
-//            for (int i=0; i<k; i++) {
-//                int index = i;
-//                String indexLetters = wordComboSupplier.get().map(word -> word.charAt(index)).map(c -> c.toString()).collect(Collectors.joining());
-//
-//                // Use these letters to output all possible word permutations into permutationsSet
-//                generatePermutations(indexLetters);
-//                permutationsSet = getPermutationsSet();
-//
-//                // See if any of these permutations match a word in the word combo
-//                Boolean matchFound = false;
-//                for (String testWord : permutationsSet) {
-//                    if (wordComboSupplier.get().anyMatch(word -> word.equals(testWord))) {
-//                        matchFound = true;
-//                        wordGrid.put(index, testWord);
-//                        break;
-//                    }
-//                }
-//
-//                // Clear permutationsSet for future use
-//                permutationsSet.clear();
-//
-//                // If a match was found we proceed to the next index in the for-loop
-//                // If a match was not found the word square has been disproven for this word combo:
-//                if (!matchFound) {
-//                    success = false;
-//                    break;
-//                }
-//            }
-//
-//            // If the word square for this word combo was disproven we should move onto the next combo
-//            // If it wasn't disproven then this combo forms a successful word square, so no more iteration needed
-//            if (success) {
-//                wordSquare = wordGrid;
-//                break;
-//            }
 
             // New method: start with each word in the combination, then test if words fit into row 2, then row 3 etc
             List<String> wordCombo = wordComboSupplier.get().collect(Collectors.toList());
