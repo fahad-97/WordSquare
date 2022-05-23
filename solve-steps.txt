@@ -22,3 +22,4 @@ some debugging during new method involved issues with strongly typed things, nee
 realized issues with using hashmap for the square; difficulty in creating deep copies. Hashmap is redundant anyway as the keys are 0 1 2 3 etc... will convert to List
 It's finally working so I'm going to ensure it runs from command line and make up some instructions
 i need to work on multithreading: https://codereview.stackexchange.com/questions/268593/asynchronous-and-recursive-word-square-generator-in-c
+figured out that using combinations again to form valid words (line 17) was the cause of massive inefficiency. Removed this and generated squares directly from valid words list. Also refined validwords list to only words of k length and added further refinements.
