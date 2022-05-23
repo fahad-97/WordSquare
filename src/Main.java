@@ -11,12 +11,6 @@ public class Main {
         int k;
         String characters;
 
-        // Generate list of valid words to compare generated words against
-        System.out.println("Loading word list...");
-        WordList wordList = new WordList("enable1.txt");
-        ArrayList viableWords = wordList.getWordList();
-        System.out.println("Done.");
-
         // Check inputs to confirm valid, then process to generate word permutations
         try {
             k = Integer.parseInt(args[0]);
@@ -31,15 +25,39 @@ public class Main {
             return;
         }
         System.out.println("Inputs validated.");
+
+        long startTime = System.currentTimeMillis();
+
+        // Generate list of viable k-length words to compare generated words against
+        System.out.println("Loading word list...");
+        WordList wordList = new WordList("enable1.txt", k);
+        ArrayList viableWords = wordList.getWordList();
+        System.out.println("Done.");
+
+        long wordListLoadTime = System.currentTimeMillis();
+        long wordListLoadTimeElapsed = wordListLoadTime - startTime;
+        System.out.println("Time elapsed: " + wordListLoadTimeElapsed + "ms");
+        System.out.println();
+
         System.out.println("Generating word permutations...");
         WordPermutations wordPermutations = new WordPermutations(k, characters);
         Set<String> generatedWords = wordPermutations.getPermutationsSet();
         System.out.println("Done.");
 
-        // Filtering generated words to leave a List of valid Word Square combinations
+        long generationTime = System.currentTimeMillis();
+        long generationTimeElapsed = generationTime - wordListLoadTime;
+        System.out.println("Time elapsed: " + generationTimeElapsed + "ms");
+        System.out.println();
+
+        // Filtering generated words to leave a List of valid words from the input string
         System.out.println("Verifying permutations are valid...");
         List<String> validWords = generatedWords.stream().filter(word -> viableWords.contains(word)).collect(Collectors.toList());
         System.out.println("Done.");
+
+        long verificationTime = System.currentTimeMillis();
+        long verificationTimeElapsed = verificationTime - generationTime;
+        System.out.println("Time elapsed: " + verificationTimeElapsed + "ms");
+        System.out.println();
 
         // Calculate a viable Word Square from the valid words
         System.out.println("Calculating viable word square...");
@@ -51,9 +69,20 @@ public class Main {
         }
         else {
             System.out.println("Word square generated!");
+
+            long calculationTime = System.currentTimeMillis();
+            long calculationTimeElapsed = calculationTime - verificationTime;
+            System.out.println("Time elapsed: " + calculationTimeElapsed + "ms");
+            System.out.println();
+
             for (String word : solution) {
                 System.out.println(Arrays.stream(word.split("")).collect(Collectors.joining(" ")));
             }
         }
+
+        long endTime = System.currentTimeMillis();
+        long timeElapsed = endTime - startTime;
+        System.out.println();
+        System.out.println("Total time elapsed: " + timeElapsed + "ms");
     }
 }
